@@ -1,0 +1,12 @@
+---
+language: python
+python:
+  - "3.6"
+install:
+  - pip install -r doc/lib.txt
+# 限制项目分支
+branches:
+  only:
+    - master
+script:
+  - python grab-client.py
