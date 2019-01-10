@@ -9,13 +9,14 @@
 """
 
 import mysql.connector
+import config.client_config as db_config
 
-def get_mysql_conn(host,port,database,user,password):
-    conn = mysql.connector.connect(host=host,port=port, database=database, user=user,password=password)
+def get_mysql_conn():
+    conn = mysql.connector.connect(host=db_config.host,port=db_config.port,database=db_config.database,user=db_config.user,password=db_config.password,charset = 'utf8')
     return conn
 
-def get_sql_list_by_id(host,port,database,user,password,sql,id):
-    conn = get_mysql_conn(host,port,database,user,password)
+def get_sql_list_by_id(sql,id):
+    conn = get_mysql_conn()
     cursor = conn.cursor()
     cursor.execute(sql, id)
     list = cursor.fetchall()
