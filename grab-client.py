@@ -9,8 +9,8 @@ import crawler.crawler_content as crawler_content
 if __name__ == '__main__':
     print('############ Grab Client Start ###############')
     sql = 'select * from web_site where id = %s and url=%s'
-    id=[1,'http://www.baidu.com']
-    list = db_mysql.get_sql_list_by_id(sql=sql,id=id)
+    params=[1,'http://www.baidu.com']
+    list = db_mysql.get_sql_list_by_params(sql=sql,params=params)
     # print(list)
     for t in range(len(list)):
         print(list[t][2])
@@ -19,5 +19,12 @@ if __name__ == '__main__':
     # print(html)
 
     # 获取链接
-    rr = re.compile(r'href="(.*?)"')
-    print(rr.findall(html))
+    rr = re.compile(r'href="(http://.*?)"')
+
+    links = rr.findall(html)
+    # print(links)
+    for m in range(len(rr.findall(html))):
+        print(links[m])
+        insert_params=[links[m],m]
+        db_mysql.execute_sql_by_params('insert into web_site (url,description) values (%s,%s)',insert_params)
+    # print(len(db_mysql.get_sql_list_by_params('select count(1) from web_site ',[])))
