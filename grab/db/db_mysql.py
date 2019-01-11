@@ -28,11 +28,12 @@ def execute_sql_by_params(sql,params):
     conn.close()
     return list
 
+# 事物sql
 def modify_sql_by_params(sql,params):
     '''执行sql语句'''
     conn = get_mysql_conn()
-    cursor = conn.cursor()
-    k = cursor.execute(sql, params)
+    conn.cursor().execute(sql, params)
+    conn.commit()
     conn.close()
 
 # 查询总数
