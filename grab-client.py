@@ -3,28 +3,36 @@
 
 import re
 
-import db.db_mysql as db_mysql
-import crawler.crawler_content as crawler_content
+from grab.db import db_mysql as db_mysql
+import grab.crawler.crawler_content as crawler_content
+
+# 获取web_site数据
+def get_web_site():
+    return db_mysql.execute_sql_by_params('select * from web_site where status=1 ',[])
+
+def get_grap_rule(id):
+    return db_mysql.execute_sql_by_params('select * from grap_rule where status=1 and web_site_id=%s ',id)
 
 if __name__ == '__main__':
     print('############ Grab Client Start ###############')
-    sql = 'select * from web_site where id = %s and url=%s'
-    params=[1,'http://www.baidu.com']
-    list = db_mysql.get_sql_list_by_params(sql=sql,params=params)
-    # print(list)
-    for t in range(len(list)):
-        print(list[t][2])
+    list = get_web_site()
 
-    html=crawler_content.get_html(list[0][2])
-    # print(html)
-
-    # 获取链接
-    rr = re.compile(r'href="(http://.*?)"')
-
-    links = rr.findall(html)
-    # print(links)
-    for m in range(len(rr.findall(html))):
-        print(links[m])
-        insert_params=[links[m],m]
-        db_mysql.execute_sql_by_params('insert into web_site (url,description) values (%s,%s)',insert_params)
-    # print(len(db_mysql.get_sql_list_by_params('select count(1) from web_site ',[])))
+    for i in list:
+        webId = [i[0]]
+        webUrl = i[3]
+        # print(webId)
+        # print(webUrl)
+        rule = get_grap_rule(webId)
+        html= crawler_content.get_html(webUrl)
+        for j in rule:
+            grabRule=j[2]
+            ruleId=j[0]
+            rr = re.compile(grabRule)
+            resultData = rr.findall(html)
+            print(resultData)
+            for k in resultData:
+                params = []
+                params.append(k)
+                params.append(ruleId)
+                # db_mysql.modify_sql_by_params(r'insert into match_data (data,grab_rule_id) values (%s,%s)',params)
+    # print(db_mysql.execute_sql_count_by_params('select * from match_data',[]))
