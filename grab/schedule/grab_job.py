@@ -17,6 +17,7 @@ def batch_job1():
     print('############ Grab Client Start ###############')
     list = get_web_site()
     print(len(list))
+    idd=0
     for i in list:
         webId = [i[0]]
         webUrl = i[3]
@@ -27,6 +28,7 @@ def batch_job1():
         for j in rule:
             grabRule=j[2]
             ruleId=j[0]
+            idd=ruleId
             rr = re.compile(grabRule)
             resultData = rr.findall(html)
             print(resultData)
@@ -35,5 +37,5 @@ def batch_job1():
                 params.append(k)
                 params.append(ruleId)
                 db_mysql.modify_sql_by_params(r'insert into match_data (data,grab_rule_id) values (%s,%s)',params)
-        db_mysql.modify_sql_by_params(r'update web_site set status=0 where id=%s',webId)
+    db_mysql.modify_sql_by_params(r'update grap_rule set status=0 where id=%s',[idd])
     print(db_mysql.execute_sql_count_by_params('select * from match_data',[]))

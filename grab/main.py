@@ -34,4 +34,4 @@ def execute_main(type,cmd, inc=60):
 
 # 每60秒查看下网络连接情况
 if __name__ == '__main__':
-    execute_main(execute_command,"netstat -an", 60)
+    execute_main(grab_data,"netstat -an", 60)
