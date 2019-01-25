@@ -9,12 +9,13 @@
 """
 
 import mysql.connector
-import config.client_config as db_config
+import grab.config.client_config as cf
+
 
 # 连接数据库
 def get_mysql_conn():
     '''获取数据库连接'''
-    conn = mysql.connector.connect(host=db_config.host,port=db_config.port,database=db_config.database,user=db_config.user,password=db_config.password,charset = 'utf8')
+    conn = mysql.connector.connect(host=cf.db_host,port=cf.db_port,database=cf.db_database,user=cf.db_user,password=cf.db_pass,charset = 'utf8')
     return conn
 
 # 执行sql

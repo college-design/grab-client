@@ -22,6 +22,7 @@ def execute_command(cmd, inc):
 
 def grab_data(cmd, inc):
     print(cmd)
+    os.system(cmd)
     grab_job.batch_job1()
     schedule.enter(inc, 0, grab_data, (cmd, inc))
 
